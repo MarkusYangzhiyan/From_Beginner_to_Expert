@@ -34,3 +34,7 @@ dist/
 # Windows/macOS
 Thumbs.db
 .DS_Store
+
+
+# raw data
+data/raw/
