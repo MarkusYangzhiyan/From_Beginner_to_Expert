@@ -1,3 +1,7 @@
+# 只作为阶段性简单练习，不属于项目运行状态下
+
+
+
 products = [
     {"name": "笔记本电脑", "category": "电脑", "price": 5999},
     {"name": "机械键盘", "category": "外设", "price": 399},
@@ -57,7 +61,7 @@ while True:
 
     if name.lower() == "q":
         print("程序已退出")
-        break 
+        break   
 
     category = input("产品类型：").strip()
     price_text = input("最高价格：").strip()
