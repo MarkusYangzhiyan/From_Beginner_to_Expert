@@ -10998,5 +10998,16 @@
     "rating": 5.0,
     "rating_count": 12,
     "store": "Natura Sintonia"
+  },
+  {
+    "id": null,
+    "name": "RTX-4090",
+    "price": 9999.0,
+    "category": [
+      "NVIDIA-GPU"
+    ],
+    "rating": null,
+    "rating_count": 0,
+    "store": "自定义商品"
   }
 ]
