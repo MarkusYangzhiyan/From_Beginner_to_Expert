@@ -3,6 +3,7 @@
 """
 
 from product_app.models import Product,ProductList
+from enum import Enum
 from product_app.service import (
     PRODUCT_PATH,
     add_product,
@@ -10,12 +11,16 @@ from product_app.service import (
     load_products
 )
 
+class MenuChoice(str,Enum):
+    SEARCH = "1",
+    ADD = "2",
+    QUIT = "q"
 
 # =====================================
 # show_prodcuts()  显示商品
 # =====================================
 
-def show_products(results:ProductList) -> None:
+def show_products(results: ProductList) -> None:
     if not results:
         print("there is no matched product can be shown")
         return 
@@ -33,7 +38,7 @@ def show_products(results:ProductList) -> None:
 # get_max_price()  处理价格输入
 # =====================================
 
-def get_max_price() -> float|None:
+def get_max_price() -> float | None:
     while True:
         price_text = input("最高价格，直接回车表示不限：").strip()
 
@@ -57,7 +62,7 @@ def get_max_price() -> float|None:
 # get_filter_conditions()   接收用户输入的查询条件
 # =====================================
 
-def get_filter_conditions() -> tuple[str,str,float|None]:
+def get_filter_conditions() -> tuple[str,str,float | None]:
     name = input("产品名称，直接回车表示不限：").strip()
     category = input("产品分类，直接回车表示不限：").strip()
     max_price = get_max_price()
@@ -68,7 +73,7 @@ def get_filter_conditions() -> tuple[str,str,float|None]:
 # get_new_product()   获得新商品的列表信息
 # =====================================
 
-def get_new_product() -> Product|None:
+def get_new_product() -> Product | None:
     name = input("新产品名称：").strip()
 
     if not name:
@@ -125,11 +130,11 @@ def main() -> None:
 
         choice = input("请选择操作：").strip()
 
-        if choice.lower() == 'q':
+        if choice.lower() == MenuChoice.QUIT.value:
             print("程序已退出")
             break 
 
-        if choice == "1":
+        if choice == MenuChoice.SEARCH.value:
             name,category,max_price = get_filter_conditions()
 
             results = filter_products(
@@ -141,7 +146,7 @@ def main() -> None:
 
             show_products(results)
 
-        elif choice == "2":
+        elif choice == MenuChoice.ADD.value:
             new_product = get_new_product()
             
             if new_product is None:

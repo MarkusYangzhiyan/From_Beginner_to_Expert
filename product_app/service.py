@@ -7,9 +7,7 @@
 # =====================================
 import json 
 from pathlib import Path
-from typing import Any
 from product_app.models import Product, ProductList
-
 
 
 # =====================================
@@ -22,7 +20,7 @@ PRODUCT_PATH = Path(__file__).resolve().parent.parent / 'data' / 'processed' / '
 # load_products()  从prodcuts.json中加载数据
 # =====================================
 
-def load_products(file_path:Path) -> ProductList:
+def load_products(file_path: Path) -> ProductList:
     try:
         text = file_path.read_text(encoding = 'utf-8')
         product_dicts = json.loads(text)
@@ -41,7 +39,7 @@ def load_products(file_path:Path) -> ProductList:
 # save_products()  把修改后的商品列表保存回products.json
 # =====================================
 
-def save_products(file_path:Path,products:ProductList) -> None:
+def save_products(file_path: Path,products: ProductList) -> None:
     file_path.parent.mkdir(parents= True,exist_ok = True)
     
     # 此时的products的格式为 [Product(...),Product(...),...]
@@ -58,10 +56,10 @@ def save_products(file_path:Path,products:ProductList) -> None:
 # =====================================
 
 def filter_products(
-        products:ProductList,
-        name:str,
-        category:str,
-        max_price:int,
+        products: ProductList,
+        name: str = "",
+        category: str = "",
+        max_price: float | None = None,
 ) -> ProductList:
     
     results = []
@@ -104,9 +102,9 @@ def filter_products(
 # =====================================
 
 def add_product(
-        products:ProductList,
-        new_product:Product,
-        file_path:Path
+        products: ProductList,
+        new_product: Product,
+        file_path: Path
 ) -> ProductList:
     
     products.append(new_product)
