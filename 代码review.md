@@ -1,6 +1,60 @@
-# 2026-06-15
+# source: From_Beginner_to_Expert\prepare_products.py
+--------------------------------------------------------------
 
-## source: From_Beginner_to_Expert\prepare_products.py
+## 2026-06-18
+
+### 1. 
+
+```
+@classmethod
+def from_dict(cls,data:dict[str,Any]) -> "Product":
+
+
+def to_dict(self):
+```
+1. 使用@classmethod代表类方法，不需要再用 def func(self,data) 这种方式，不需要写self了
+2. cls代表类本身
+3. "Product" 加""是因为此时Product类还在创建中
+4. from_dict是类方法，to_dict是对象方法。调用时不同： Product.from_dict(data) vs product.to_dict()
+
+### 2.
+
+```
+python -m ruff check product_app
+
+python -m ruff check product_app --fix
+```
+
+1. ruff 是一个python包，是用来检查代码质量和代码风格的工具
+2. 可以用python -m ruff check [代码] --fix 来自动修复
+
+
+### 3. 
+
+```
+logger = logging.gerLogger(__name__) 
+
+def setup_logging(
+    logging.basicConfig(
+        level = logging.INFO,
+        format = "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        handlers = [
+            logging.StreamHandler(),
+            logging.FileHandler("app.log",encoding = 'utf-8')
+        ]
+    )
+)
+```
+
+上一个代码是用于终端打印的
+下一个代码是在文件日志中保存记录
+
+
+
+
+
+--------------------------------------------------------------
+## 2026-06-15
 
 ### 1.
 
