@@ -4,12 +4,25 @@
 
 from product_app.models import Product,ProductList
 from enum import Enum
+import logging 
 from product_app.service import (
     PRODUCT_PATH,
     add_product,
     filter_products,
     load_products
 )
+
+def setup_logging() -> None:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler("app.log",encoding = 'utf-8')
+        ]
+    )
+
+logger = logging.getLogger(__name__)
 
 class MenuChoice(str,Enum):
     SEARCH = "1",
@@ -20,8 +33,17 @@ class MenuChoice(str,Enum):
 # show_prodcuts()  显示商品
 # =====================================
 
-def show_products(results: ProductList) -> None:
+def show_products(
+        results: ProductList,
+        name: str = "",
+        category: str = "",
+        max_price: float | None = None
+) -> None:
     if not results:
+        logger.info("No matched products found.query_name =%r,query_category=%r,query_price=%r",
+                    name,  
+                    category,
+                    max_price)
         print("there is no matched product can be shown")
         return 
 
@@ -116,6 +138,8 @@ def get_new_product() -> Product | None:
 # =====================================
 
 def main() -> None:
+    setup_logging()
+
     products = load_products(PRODUCT_PATH)
 
     if not products:
@@ -144,7 +168,7 @@ def main() -> None:
                 max_price = max_price
             )
 
-            show_products(results)
+            show_products(results,name,category,max_price)
 
         elif choice == MenuChoice.ADD.value:
             new_product = get_new_product()

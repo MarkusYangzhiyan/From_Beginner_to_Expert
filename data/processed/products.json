@@ -11020,5 +11020,16 @@
     "rating": null,
     "rating_count": 0,
     "store": "自定义商品"
+  },
+  {
+    "id": null,
+    "name": "拉夫劳伦毛线衫",
+    "price": 2999.0,
+    "category": [
+      "上衣"
+    ],
+    "rating": null,
+    "rating_count": 0,
+    "store": "自定义商品"
   }
 ]

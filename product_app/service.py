@@ -8,7 +8,9 @@
 import json 
 from pathlib import Path
 from product_app.models import Product, ProductList
+import logging 
 
+logger = logging.getLogger(__name__)
 
 # =====================================
 # 基础环境配置
@@ -27,11 +29,11 @@ def load_products(file_path: Path) -> ProductList:
         return [Product.from_dict(item) for item in product_dicts]
         
     except FileNotFoundError:
-        print(f" Can not Found {file_path}")
+        logger.error("Can not Found %r",file_path)
         return []
     
     except json.JSONDecodeError as e:
-        print(f"there is an error when parse {file_path}, error:{e}")
+        logger.error("there is an error when parse %r, error: %r",file_path,e)
         return []
     
 
@@ -111,6 +113,6 @@ def add_product(
 
     save_products(file_path,products)
 
-    print("商品已添加并保存")
+    logger.info("商品 % r 已添加并保存",new_product.name)
 
     return products
