@@ -24,9 +24,9 @@ def show_products(results:ProductList) -> None:
 
     for product in results:
         print(
-            f"product_name:{product.get("name")}\n"
-            f"product_category:{product.get("category")}\n"
-            f"product_price:{product.get("price")}\n"
+            f"product_name:{product.name}\n"
+            f"product_category:{product.category}\n"
+            f"product_price:{product.price}\n"
         )
 
 # =====================================
@@ -96,15 +96,15 @@ def get_new_product() -> Product|None:
 
         break 
     
-    return {
-        "id": None,
-        "name": name,
-        "price": price,
-        "category": [category],
-        "rating": None,
-        "rating_count": 0,
-        "store": "自定义商品",
-    }
+    return Product(
+        id=None,
+        name=name,
+        price=price,
+        category=[category],
+        rating=None,
+        rating_count=0,
+        store="自定义商品",
+    )
 
 # =====================================
 # main()  主程序流程  
@@ -142,7 +142,13 @@ def main() -> None:
             show_products(results)
 
         elif choice == "2":
-            products = add_product(products,PRODUCT_PATH)
+            new_product = get_new_product()
+            
+            if new_product is None:
+                print("添加商品失败")
+                continue 
+            
+            products = add_product(products,new_product,PRODUCT_PATH)
 
         else:
             print("无效选择，请重新输入")

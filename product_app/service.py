@@ -25,7 +25,8 @@ PRODUCT_PATH = Path(__file__).resolve().parent.parent / 'data' / 'processed' / '
 def load_products(file_path:Path) -> ProductList:
     try:
         text = file_path.read_text(encoding = 'utf-8')
-        return json.loads(text)
+        product_dicts = json.loads(text)
+        return [Product.from_dict(item) for item in product_dicts]
         
     except FileNotFoundError:
         print(f" Can not Found {file_path}")
@@ -40,15 +41,16 @@ def load_products(file_path:Path) -> ProductList:
 # save_products()  把修改后的商品列表保存回products.json
 # =====================================
 
-def save_products(file_path:Path,products:ProductList):
+def save_products(file_path:Path,products:ProductList) -> None:
     file_path.parent.mkdir(parents= True,exist_ok = True)
-
+    
+    # 此时的products的格式为 [Product(...),Product(...),...]
+    product_dicts = [product.to_dict() for product in products]
     json_text = json.dumps(
-        products,
+        product_dicts,
         ensure_ascii=False,
         indent=2
     )
-
     file_path.write_text(json_text,encoding = 'utf-8')
 
 # =====================================
@@ -65,9 +67,9 @@ def filter_products(
     results = []
 
     for product in products:
-        product_name = product.get("name","")
-        product_price = product.get("price")
-        product_categories = product.get("category",[])
+        product_name = product.name
+        product_price = product.price
+        product_categories = product.category
 
         if isinstance(product_categories,str):
             product_categories = [product_categories]
@@ -106,7 +108,7 @@ def add_product(
         new_product:Product,
         file_path:Path
 ) -> ProductList:
-   
+    
     products.append(new_product)
 
     save_products(file_path,products)
