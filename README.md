@@ -1,5 +1,3 @@
-这是一个真实场景下的PR练习
-
 # From_Beginner_to_Expert
 
 6 个月 AI-Agent 工程师成长计划实践仓库。
