@@ -113,6 +113,19 @@ def add_product(
 
     save_products(file_path,products)
 
-    logger.info("商品 % r 已添加并保存",new_product.name)
+    logger.info("商品 %r 已添加并保存",new_product.name)
 
     return products
+
+
+def sort_products_by_price(
+        products: ProductList,
+        reverse : bool = False
+) -> ProductList:
+    
+    return sorted(
+        products,
+        key = lambda product : product.price,
+        reverse = reverse
+    )
+
