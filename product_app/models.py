@@ -1,5 +1,5 @@
 """
-存放数据结构，比如说product类型
+ Product 数据模型
 """
 
 from dataclasses import dataclass

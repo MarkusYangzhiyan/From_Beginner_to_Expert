@@ -4,8 +4,8 @@ Arrange-Act-Assert
 
 
 from product_app.models import Product
-from product_app.service import filter_products,sort_products_by_price,load_products
-
+from product_app.service import filter_products,sort_products_by_price
+from product_app.repository import load_products
 
 #====================================
 # 生成测试集数据
