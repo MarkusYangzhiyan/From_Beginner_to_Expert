@@ -11031,5 +11031,16 @@
     "rating": null,
     "rating_count": 0,
     "store": "自定义商品"
+  },
+  {
+    "id": null,
+    "name": "RTX-5090",
+    "price": 15999.0,
+    "category": [
+      "NVIDIA-GPU"
+    ],
+    "rating": null,
+    "rating_count": 0,
+    "store": "命令行添加"
   }
 ]
