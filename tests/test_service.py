@@ -4,9 +4,13 @@ Arrange-Act-Assert
 
 
 from product_app.models import Product
-from product_app.service import filter_products,sort_products_by_price
-from product_app.repository import load_products
-
+from product_app.service import (
+    filter_products,
+    sort_products_by_price,
+    add_product
+)
+from product_app.repository import load_products,save_products
+from product_app.main import create_parser
 #====================================
 # 生成测试集数据
 #====================================
@@ -136,3 +140,90 @@ def test_load_products_two(tmp_path):
     results = load_products(invalid_file)
 
     assert results == []
+
+
+# 9. add商品测试 
+def test_add_product():
+
+    products = make_products()
+
+    new_product = Product(
+        id = None,
+        name = 'HUAWEI NOVA 15',
+        category = ['phone'],
+        price = 2049.0
+    )
+
+    original_count = len(products)
+
+    results = add_product(products,new_product)
+
+    assert len(results) == original_count + 1
+    assert results[-1] == new_product
+
+
+# 10. 保存并读取测试
+def test_save_and_load_products(tmp_path):
+
+    file_path = tmp_path / "products.json"
+
+    products = [
+        Product(
+            id = 'test_001',
+            name = 'HUAWEI NOVA 15',
+            category = ['phone'],
+            price = 2049.0
+        )
+    ]
+
+    save_products(file_path,products)
+    loaded_products = load_products(file_path)
+
+    assert loaded_products == products 
+
+
+# 11. search 参数解析测试
+def test_create_parser_search_command():
+
+    parser = create_parser()
+
+    command_args = [
+        "search",
+        "--name",
+        "4090",
+        "--category",
+        "gpu",
+        "--max-price",
+        "10000"
+    ]
+
+    args = parser.parse_args(command_args)
+
+    assert args.command == "search"
+    assert args.name == '4090'
+    assert args.category == 'gpu'
+    assert args.max_price == 10000
+
+
+
+# 12. add 参数解析测试
+def test_create_parser_add_command():
+
+    parser = create_parser()
+
+    command_args = [
+        "add",
+        "--name",
+        "RTX-5090",
+        "--category",
+        "GPU",
+        "--price",
+        "15999"
+    ]
+
+    args = parser.parse_args(command_args)
+
+    assert args.command == "add"
+    assert args.name == 'RTX-5090'
+    assert args.category == 'GPU'
+    assert args.price == 15999
