@@ -2,7 +2,7 @@
 
 6 个月 AI-Agent 工程师成长计划实践仓库。
 
-## 当前项目：Product Manager CLI
+## Python 工程化、测试与 Git 练习：Product Manager CLI
 
 Product Manager CLI 是一个基于 Python 的商品数据管理命令行程序，目前支持：
 
@@ -26,6 +26,93 @@ product_app/
 `-- main.py        # 组合各模块并启动程序
 ```
 
+## 环境要求
+
+- Python 3.12
+- Git
+- Windows PowerShell
+
+## 安装
+
+克隆当前开发分支并进入项目目录：
+
+```powershell
+git clone --branch dev_yzy https://github.com/MarkusYangzhiyan/From_Beginner_to_Expert.git
+cd From_Beginner_to_Expert
+```
+
+创建并激活虚拟环境：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+安装项目依赖：
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+## 运行
+
+以下命令需要在项目根目录执行。
+
+### 交互模式
+
+```powershell
+python -m product_app.main
+```
+
+程序启动后，可以通过菜单查询商品、添加商品或退出程序。
+
+### 命令行查询
+
+```powershell
+python -m product_app.main search --name 4090 --category GPU --max-price 10000
+```
+
+查询参数可以按需省略，例如只按名称查询：
+
+```powershell
+python -m product_app.main search --name 4090
+```
+
+### 命令行添加商品
+
+```powershell
+python -m product_app.main add --name RTX-5090 --category GPU --price 15999
+```
+
+添加商品会修改 `data/processed/products.json`。名称和分类不能为空，价格必须是大于 0 的数字。
+
+## 测试与代码检查
+
+运行全部自动化测试：
+
+```powershell
+python -m pytest -q
+```
+
+当前预期结果：
+
+```text
+12 passed
+```
+
+运行 Ruff 代码检查：
+
+```powershell
+python -m ruff check product_app tests
+```
+
+当前预期结果：
+
+```text
+All checks passed!
+```
+
 ## 第一周主要成果和进度
 
 1. **开发环境与版本控制：**
@@ -45,7 +132,7 @@ product_app/
 
 1. **Python 包与工程环境：**
    `product_app`、虚拟环境、依赖管理。
-   [--init--.py](product_app/__init__.py)、[requirements.txt](requirements.txt)。
+   [__init__.py](product_app/__init__.py)、[requirements.txt](requirements.txt)。
 2. **数据模型与类型提示：**
    类、对象、`dataclass`、`Product`、`from_dict()`、`to_dict()`、类型提示、`Enum`。
    [models.py](product_app/models.py)、[cli.py](product_app/cli.py)、[service.py](product_app/service.py)。
