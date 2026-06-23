@@ -30,6 +30,8 @@ product_app/
 
 - Python 3.12
 - Git
+- Docker Desktop
+- DBeaver
 - Windows PowerShell
 
 ## 安装
@@ -86,6 +88,123 @@ python -m product_app.main add --name RTX-5090 --category GPU --price 15999
 ```
 
 添加商品会修改 `data/processed/products.json`。名称和分类不能为空，价格必须是大于 0 的数字。
+
+## 本地 MySQL 数据库
+
+项目使用 Docker 运行本地 MySQL 8.0，并通过 DBeaver 管理。由于本机已有其他 MySQL 服务占用 `3306`，Docker 容器使用本机端口 `3307`。
+
+### 数据库配置
+
+```text
+Docker 镜像：mysql:8.0
+容器名称：agent-mysql
+主机地址：127.0.0.1
+主机端口：3307
+容器端口：3306
+数据卷：agent_mysql_data
+数据库：agent_learning
+```
+
+`127.0.0.1` 表示数据库只接受本机连接。数据保存在 `agent_mysql_data` 数据卷中，停止或重启容器不会删除数据。
+
+### 首次创建容器
+
+下面的命令只在首次创建容器时执行：
+
+```powershell
+docker run --name agent-mysql `
+  --restart unless-stopped `
+  -e MYSQL_ALLOW_EMPTY_PASSWORD=yes `
+  -e MYSQL_ROOT_HOST=% `
+  -p 127.0.0.1:3307:3306 `
+  -v agent_mysql_data:/var/lib/mysql `
+  -d mysql:8.0 `
+  --default-authentication-plugin=mysql_native_password
+```
+
+当前 root 空密码配置仅用于绑定在 `127.0.0.1` 的本地学习环境，禁止用于共享、测试或生产服务器。
+
+### 常用 Docker 命令
+
+```powershell
+# 查看运行状态
+docker ps --filter name=agent-mysql
+
+# 查看日志
+docker logs agent-mysql
+
+# 停止、启动和重启
+docker stop agent-mysql
+docker start agent-mysql
+docker restart agent-mysql
+```
+
+容器已经创建后，继续使用时执行 `docker start agent-mysql`，不需要重复执行 `docker run`。
+
+### DBeaver 连接
+
+DBeaver 中已配置连接 `Agent MySQL Docker`，连接参数如下：
+
+```text
+主机：127.0.0.1
+端口：3307
+数据库：可留空，或填写 agent_learning
+用户名：root
+密码：留空
+```
+
+连接后可运行以下 SQL 验证：
+
+```sql
+SHOW DATABASES;
+USE agent_learning;
+SELECT DATABASE(), VERSION();
+```
+
+### Python 连接
+
+Python 程序使用 `app_user` 连接 `agent_learning`，不要使用 root。先安装驱动：
+
+```powershell
+python -m pip install mysql-connector-python
+```
+
+在本地 `.env` 中配置，不要将真实密码提交到 Git：
+
+```dotenv
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3307
+MYSQL_DATABASE=agent_learning
+MYSQL_USER=app_user
+MYSQL_PASSWORD=<LOCAL_PASSWORD>
+```
+
+连接示例：
+
+```python
+import os
+
+import mysql.connector
+
+
+connection = mysql.connector.connect(
+    host=os.environ["MYSQL_HOST"],
+    port=int(os.environ["MYSQL_PORT"]),
+    database=os.environ["MYSQL_DATABASE"],
+    user=os.environ["MYSQL_USER"],
+    password=os.environ["MYSQL_PASSWORD"],
+)
+
+try:
+    cursor = connection.cursor()
+    cursor.execute("SELECT DATABASE(), VERSION()")
+    print(cursor.fetchone())
+finally:
+    cursor.close()
+    connection.close()
+```
+
+当前 `app_user` 具有 `agent_learning` 下建表和数据增删改查权限。后续权限练习将另外创建只读用户。
 
 ## 测试与代码检查
 
